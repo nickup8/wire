@@ -6,9 +6,12 @@ import {
     Stack,
     TextField,
     Button,
+    Alert,
+    AlertTitle,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axiosClient from "../../axiosClient";
 
 export interface ISupplierForm {
     supplierCode: string;
@@ -17,8 +20,27 @@ export interface ISupplierForm {
 
 export const SupplierFormNew = () => {
     const form = useForm<ISupplierForm>();
-    const { register, formState } = form;
+    const { register, formState, handleSubmit, getValues } = form;
     const { isValid } = formState;
+
+    const [sending, setSending] = useState(false);
+    const [errors, setErrors] = useState<string | null>(null);
+
+    const onSubmit = () => {
+        setSending(true);
+        axiosClient
+            .post("/suppliers", {
+                supplier_code: getValues("supplierCode"),
+                supplier_name: getValues("supplierName"),
+            })
+            .then((response) => {
+                setSending(false);
+            })
+            .catch((error) => {
+                setSending(false);
+            });
+    };
+
     return (
         <Box>
             <Typography
@@ -30,7 +52,7 @@ export const SupplierFormNew = () => {
                 Добавить поставщика
             </Typography>
             <Paper variant="outlined" sx={{ p: 2 }}>
-                <form noValidate>
+                <form noValidate onSubmit={handleSubmit(onSubmit)}>
                     <Stack spacing={2} direction="row" mb={2}>
                         <TextField
                             type="text"
@@ -56,10 +78,11 @@ export const SupplierFormNew = () => {
                         />
                     </Stack>
                     <Button
+                        type="submit"
                         variant="contained"
                         size="large"
                         sx={{ mr: 2 }}
-                        disabled={!isValid}
+                        disabled={!isValid || sending}
                     >
                         Добавить поставщика
                     </Button>
