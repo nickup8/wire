@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-import { useAppDispatch } from "../../hooks";
 import axiosClient from "../../axiosClient";
 
 import {
@@ -11,14 +9,23 @@ import {
     Paper,
     Button,
     IconButton,
+    TableContainer,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
+
+import { COLUMNS } from "./columnsSupplier";
 
 export interface ISuppliers {
     id?: number | null;
     supplierCode: string;
     supplierName: string;
+    createdAt: string;
 }
 
 export const Suppplier: React.FC = () => {
@@ -72,33 +79,60 @@ export const Suppplier: React.FC = () => {
                         </Button>
                     </Box>
                     <Paper variant="outlined" sx={{ p: 2 }}>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Код поставщика</th>
-                                    <th>Наименование поставщика</th>
-                                    <th>Действия</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {suppliers.map((obj, index) => {
-                                    return (
-                                        <tr key={index + `_${obj.id}`}>
-                                            <td>{obj.supplierCode}</td>
-                                            <td>{obj.supplierName}</td>
-                                            <td>
-                                                <IconButton
-                                                    component={Link}
-                                                    to={`/supplier/${obj.id}`}
+                        {suppliers.length === 0 ? (
+                            <Typography variant="h6" component="p">
+                                Поставщиков нет
+                            </Typography>
+                        ) : (
+                            <TableContainer>
+                                <Table sx={{ width: "100%" }}>
+                                    <TableHead>
+                                        <TableRow>
+                                            {COLUMNS.map((column, index) => {
+                                                return (
+                                                    <TableCell
+                                                        key={`${column.Header}_${index}`}
+                                                    >
+                                                        {column.Header}
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {suppliers.map((supplier) => {
+                                            return (
+                                                <TableRow
+                                                    key={
+                                                        supplier.supplierCode +
+                                                        "_" +
+                                                        supplier.supplierName
+                                                    }
                                                 >
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                                                    <TableCell>
+                                                        {supplier.supplierCode}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {supplier.supplierName}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {supplier.createdAt}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <IconButton
+                                                            component={Link}
+                                                            to={`/supplier/${supplier.id}`}
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
                     </Paper>
                 </div>
             )}

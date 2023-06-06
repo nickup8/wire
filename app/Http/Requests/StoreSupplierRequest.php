@@ -36,7 +36,7 @@ class StoreSupplierRequest extends FormRequest
             'supplier_code' => [
                 'required',
                 'string',
-                Rule::unique("suppliers", "supplierCode")->ignore($this->id)
+                Rule::unique("suppliers", "supplier_code")->ignore($this->id)
             ],
             'supplier_name' => 'required|string'
         ];
