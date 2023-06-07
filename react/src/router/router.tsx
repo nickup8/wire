@@ -1,11 +1,11 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { DefaultLayout } from "../layouts/DefaultLayout";
 import { Suppplier } from "../components/supplier/Suppplier";
-import { SupplierForm } from "../components/supplier/SupplierForm";
 import { LoginLayout } from "../layouts/LoginLayout";
 import { Dashboard } from "../components/Dashboard/Dashboard";
 import { SupplierFormNew } from "../components/supplier/SupplierFormNew";
 import { SupplierFormEdit } from "../components/supplier/SupplierFormEdit";
+import { Invoices } from "../components/invoices/Invoices";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: "/supplier/:id",
                 element: <SupplierFormEdit />,
+            },
+            {
+                path: "/invoices",
+                element: <Invoices />,
             },
         ],
     },

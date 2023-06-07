@@ -92,11 +92,23 @@ export const Suppplier: React.FC = () => {
                                                 return (
                                                     <TableCell
                                                         key={`${column.Header}_${index}`}
+                                                        sx={{
+                                                            fontSize: "18px",
+                                                            fontWeight: "bold",
+                                                        }}
                                                     >
                                                         {column.Header}
                                                     </TableCell>
                                                 );
                                             })}
+                                            <TableCell
+                                                sx={{
+                                                    fontSize: "18px",
+                                                    fontWeight: "bold",
+                                                }}
+                                            >
+                                                Редактировать
+                                            </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
