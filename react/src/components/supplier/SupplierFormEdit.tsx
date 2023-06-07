@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import {
     Box,
     Typography,
@@ -7,17 +7,28 @@ import {
     TextField,
     Button,
     LinearProgress,
+    Alert,
+    AlertProps,
+    Snackbar,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axiosClient from "./../../axiosClient";
 import { ISupplierForm } from "./SupplierFormNew";
 
+const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
+    function SnackbarAlert(props, ref) {
+        return <Alert elevation={6} ref={ref} {...props} />;
+    }
+);
+
 export const SupplierFormEdit = () => {
     const form = useForm<ISupplierForm>();
-    const { register, formState, setValue } = form;
+    const { register, formState, setValue, handleSubmit, getValues } = form;
     const { isValid, isDirty } = formState;
     const [loading, setLoading] = useState(true);
+    const [sending, setSending] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const { id } = useParams();
 
@@ -29,6 +40,33 @@ export const SupplierFormEdit = () => {
             setLoading(false);
         });
     }, []);
+
+    const onSubmit = () => {
+        setSending(true);
+        axiosClient
+            .put(`/suppliers/${id}`, {
+                supplier_code: getValues("supplierCode"),
+                supplier_name: getValues("supplierName"),
+            })
+            .then((response) => {
+                console.log(response);
+                setSending(false);
+                setOpen(true);
+            })
+            .catch((error) => {
+                setSending(false);
+            });
+    };
+
+    const handleClose = (
+        event?: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+    };
 
     return (
         <>
@@ -48,10 +86,10 @@ export const SupplierFormEdit = () => {
                         fontStyle={"bold"}
                         sx={{ px: 2, mb: 2 }}
                     >
-                        Добавить поставщика
+                        Редактировать поставщика
                     </Typography>
                     <Paper variant="outlined" sx={{ p: 2 }}>
-                        <form noValidate>
+                        <form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Stack spacing={2} direction="row" mb={2}>
                                 <TextField
                                     type="text"
@@ -81,9 +119,10 @@ export const SupplierFormEdit = () => {
                                 variant="contained"
                                 size="large"
                                 sx={{ mr: 2 }}
-                                disabled={!isDirty || !isValid}
+                                disabled={!isDirty || !isValid || sending}
+                                type="submit"
                             >
-                                Добавить поставщика
+                                Сохранить
                             </Button>
                             <Button
                                 component={Link}
@@ -97,6 +136,19 @@ export const SupplierFormEdit = () => {
                     </Paper>
                 </Box>
             )}
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <SnackbarAlert
+                    severity="success"
+                    variant="filled"
+                    onClose={handleClose}
+                >
+                    Поставщик упешно отредактирован
+                </SnackbarAlert>
+            </Snackbar>
         </>
     );
 };

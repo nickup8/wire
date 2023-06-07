@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 
 import { Link } from "react-router-dom";
-
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -21,6 +22,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Grid4x4Icon from "@mui/icons-material/Grid4x4";
+import ArticleIcon from "@mui/icons-material/Article";
 
 import { useAppSelector } from "../../../hooks";
 import { useState } from "react";
@@ -32,6 +34,7 @@ export const Sidebar = () => {
     const [openWarehouse, setOpenWarehouse] = useState(false);
     const [openFeeding, setOpenFeeding] = useState(false);
     const [openSetting, setOpenSetting] = useState(false);
+    const [openDocuments, setOpenDocuments] = useState(false);
     const open = useAppSelector((state) => state.drawer.open);
     return (
         <Drawer
@@ -105,7 +108,30 @@ export const Sidebar = () => {
                             <ListItemIcon>
                                 <SystemUpdateAltIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Зона приемки" />
+                            <ListItemText primary="Буферная зона" />
+                        </ListItemButton>
+                    </List>
+                </Collapse>
+                <ListItemButton
+                    onClick={() => setOpenDocuments(!openDocuments)}
+                >
+                    <ListItemIcon>
+                        <AttachFileIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Документы" />
+                    {openDocuments ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </ListItemButton>
+                <Collapse in={openDocuments} timeout="auto" unmountOnExit>
+                    <List component="div">
+                        <ListItemButton
+                            sx={{ pl: 4 }}
+                            component={Link}
+                            to="/invoices"
+                        >
+                            <ListItemIcon>
+                                <CreateNewFolderIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Накладные" />
                         </ListItemButton>
                     </List>
                 </Collapse>
