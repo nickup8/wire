@@ -6,6 +6,9 @@ import { Dashboard } from "../components/Dashboard/Dashboard";
 import { SupplierFormNew } from "../components/supplier/SupplierFormNew";
 import { SupplierFormEdit } from "../components/supplier/SupplierFormEdit";
 import { Invoices } from "../components/invoices/Invoices";
+import { InvoiceFormUpload } from "../components/invoices/InvoiceFormUpload";
+
+const token = false;
 
 const router = createBrowserRouter([
     {
@@ -31,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: "/invoices",
                 element: <Invoices />,
+            },
+            {
+                path: "/invoices/new",
+                element: <InvoiceFormUpload />,
             },
         ],
     },

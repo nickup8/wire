@@ -12,7 +12,7 @@ import {
     AlertProps,
     IconButton,
 } from "@mui/material";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axiosClient from "../../axiosClient";
 
@@ -36,6 +36,8 @@ export const SupplierFormNew = () => {
     const [errors, setErrors] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
 
+    const navigate = useNavigate();
+
     const onSubmit = () => {
         setSending(true);
         axiosClient
@@ -46,6 +48,7 @@ export const SupplierFormNew = () => {
             .then((response) => {
                 setSending(false);
                 setOpen(true);
+                return navigate(-1);
             })
             .catch((error) => {
                 setSending(false);

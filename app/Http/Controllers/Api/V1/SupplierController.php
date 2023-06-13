@@ -6,7 +6,9 @@ use App\Models\Supplier;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FilterSupplierRequest;
 use App\Http\Resources\SupplierResource;
+use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
@@ -53,5 +55,12 @@ class SupplierController extends Controller
         $supplier->delete();
 
         return response()->noContent();
+    }
+
+    public function query(Request $request)
+    {
+        $input = $request->validated();
+        $data = Supplier::select("supplier_code")->where("id")->get();
+        return response()->json($data);
     }
 }
