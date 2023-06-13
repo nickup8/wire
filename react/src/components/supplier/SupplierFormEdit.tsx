@@ -11,7 +11,7 @@ import {
     AlertProps,
     Snackbar,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axiosClient from "./../../axiosClient";
 import { ISupplierForm } from "./SupplierFormNew";
@@ -29,6 +29,8 @@ export const SupplierFormEdit = () => {
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
     const [open, setOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     const { id } = useParams();
 
@@ -49,9 +51,9 @@ export const SupplierFormEdit = () => {
                 supplier_name: getValues("supplierName"),
             })
             .then((response) => {
-                console.log(response);
                 setSending(false);
                 setOpen(true);
+                return navigate(-1);
             })
             .catch((error) => {
                 setSending(false);
