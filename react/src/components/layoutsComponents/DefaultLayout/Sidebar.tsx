@@ -144,7 +144,11 @@ export const Sidebar = () => {
                 </ListItemButton>
                 <Collapse in={openSetting} timeout="auto" unmountOnExit>
                     <List component="div">
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton
+                            sx={{ pl: 4 }}
+                            component={Link}
+                            to="/users"
+                        >
                             <ListItemIcon>
                                 <AppsIcon />
                             </ListItemIcon>

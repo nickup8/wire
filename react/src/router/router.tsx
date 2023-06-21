@@ -7,6 +7,8 @@ import { SupplierFormNew } from "../components/supplier/SupplierFormNew";
 import { SupplierFormEdit } from "../components/supplier/SupplierFormEdit";
 import { Invoices } from "../components/invoices/Invoices";
 import { InvoiceFormUpload } from "../components/invoices/InvoiceFormUpload";
+import { Users } from "../components/users/Users";
+import { UsersFormNew } from "../components/users/UsersFormNew";
 
 const token = false;
 
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
             {
                 path: "/invoices/new",
                 element: <InvoiceFormUpload />,
+            },
+            {
+                path: "/users",
+                element: <Users />,
+            },
+            {
+                path: "/users/new",
+                element: <UsersFormNew />,
             },
         ],
     },

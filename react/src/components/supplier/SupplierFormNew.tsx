@@ -48,7 +48,7 @@ export const SupplierFormNew = () => {
             .then((response) => {
                 setSending(false);
                 setOpen(true);
-                return navigate(-1);
+                return navigate("/supplier");
             })
             .catch((error) => {
                 setSending(false);
