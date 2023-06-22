@@ -10,7 +10,7 @@ import {
     Collapse,
 } from "@mui/material";
 
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -69,19 +69,31 @@ export const Sidebar = () => {
                 </ListItemButton>
                 <Collapse in={openWarehouse} timeout="auto" unmountOnExit>
                     <List component="div">
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton
+                            sx={{ pl: 4 }}
+                            component={Link}
+                            to="/warehouse"
+                        >
                             <ListItemIcon>
                                 <AppsIcon />
                             </ListItemIcon>
                             <ListItemText primary="Места хранения" />
                         </ListItemButton>
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton
+                            sx={{ pl: 4 }}
+                            component={Link}
+                            to="/warehouse/acceptance"
+                        >
                             <ListItemIcon>
                                 <SystemUpdateAltIcon />
                             </ListItemIcon>
                             <ListItemText primary="Зона приемки" />
                         </ListItemButton>
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton
+                            sx={{ pl: 4 }}
+                            component={NavLink}
+                            to="/warehouse/marriage"
+                        >
                             <ListItemIcon>
                                 <CancelIcon />
                             </ListItemIcon>
@@ -98,13 +110,21 @@ export const Sidebar = () => {
                 </ListItemButton>
                 <Collapse in={openFeeding} timeout="auto" unmountOnExit>
                     <List component="div">
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton
+                            component={Link}
+                            to="/feeding"
+                            sx={{ pl: 4 }}
+                        >
                             <ListItemIcon>
                                 <AppsIcon />
                             </ListItemIcon>
                             <ListItemText primary="Места хранения" />
                         </ListItemButton>
-                        <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemButton
+                            component={Link}
+                            to="/feeding/buffer"
+                            sx={{ pl: 4 }}
+                        >
                             <ListItemIcon>
                                 <SystemUpdateAltIcon />
                             </ListItemIcon>
