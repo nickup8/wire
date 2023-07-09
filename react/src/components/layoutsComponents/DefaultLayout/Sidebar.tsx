@@ -23,6 +23,7 @@ import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Grid4x4Icon from "@mui/icons-material/Grid4x4";
 import ArticleIcon from "@mui/icons-material/Article";
+import GroupIcon from "@mui/icons-material/Group";
 
 import { useAppSelector } from "../../../hooks";
 import { useState } from "react";
@@ -170,7 +171,7 @@ export const Sidebar = () => {
                             to="/users"
                         >
                             <ListItemIcon>
-                                <AppsIcon />
+                                <GroupIcon />
                             </ListItemIcon>
                             <ListItemText primary="Пользователи" />
                         </ListItemButton>

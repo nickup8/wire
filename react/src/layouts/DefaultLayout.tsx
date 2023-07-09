@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components/layoutsComponents/DefaultLayout/Sidebar";
 import { Header } from "../components/layoutsComponents/DefaultLayout/Header";
+import { Footer } from "../components/layoutsComponents/DefaultLayout/Footer";
 
 const drawerWidth = 240;
 
@@ -37,9 +38,20 @@ export const DefaultLayout = () => {
         <Box sx={{ display: "flex" }}>
             <Header />
             <Sidebar />
-            <Main open={open} sx={{ px: 8 }}>
+            <Main
+                open={open}
+                sx={{
+                    px: 8,
+                    pb: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
                 <Toolbar />
-                <Outlet />
+                <Box sx={{ flex: 1 }}>
+                    <Outlet />
+                </Box>
+                <Footer />
             </Main>
         </Box>
     );
