@@ -28,6 +28,7 @@ import type { NestedValue } from "react-hook-form";
 interface IUserForm {
     name: string;
     password: string;
+    passwordConfirm: string;
     role: string;
 }
 
@@ -40,6 +41,7 @@ export const UsersFormNew = () => {
     const [errors, setErrors] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const navigate = useNavigate();
 
     const onSubmit = () => {
@@ -57,8 +59,15 @@ export const UsersFormNew = () => {
     };
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleClickShowPasswordConfirm = () =>
+        setShowPasswordConfirm((show) => !show);
 
     const handleMouseDownPassword = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        event.preventDefault();
+    };
+    const handleMouseDownPasswordConfirm = (
         event: React.MouseEvent<HTMLButtonElement>
     ) => {
         event.preventDefault();
@@ -120,6 +129,44 @@ export const UsersFormNew = () => {
                                         </InputAdornment>
                                     }
                                     label="Password"
+                                />
+                            </FormControl>
+                            <FormControl fullWidth size="small">
+                                <InputLabel htmlFor="password">
+                                    Подтверждение пароля
+                                </InputLabel>
+                                <OutlinedInput
+                                    {...register("passwordConfirm", {
+                                        required: "Пароли не совпадают",
+                                        min: 6,
+                                    })}
+                                    id="password"
+                                    type={
+                                        showPasswordConfirm
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={
+                                                    handleClickShowPasswordConfirm
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPasswordConfirm
+                                                }
+                                                edge="end"
+                                            >
+                                                {showPasswordConfirm ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="PasswordConfirm"
                                 />
                             </FormControl>
                             <Controller
