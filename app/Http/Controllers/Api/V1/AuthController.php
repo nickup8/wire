@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json([
-                'message' => 'Имя пользователя или пароль неверны',
+                'message' => 'Пароль неверный',
             ], 401);
         }
 
@@ -49,6 +49,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => new UserResource($user),
+            'token' => $token,
         ])->withCookie($cookie);
     }
 
