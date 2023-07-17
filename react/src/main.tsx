@@ -5,9 +5,12 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router/router";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { ContextProvider } from "./context/ContextProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <Provider store={store}>
-        <RouterProvider router={router} />
-    </Provider>
+    <ContextProvider>
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
+    </ContextProvider>
 );

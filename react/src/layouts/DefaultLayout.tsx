@@ -1,10 +1,14 @@
 import { styled, useTheme, Box, Toolbar } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { Sidebar } from "../components/layoutsComponents/DefaultLayout/Sidebar";
 import { Header } from "../components/layoutsComponents/DefaultLayout/Header";
 import { Footer } from "../components/layoutsComponents/DefaultLayout/Footer";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
+import axiosClient from "../axiosClient";
+import { useStateContext } from "../context/ContextProvider";
 
 const drawerWidth = 240;
 
@@ -30,9 +34,12 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 export const DefaultLayout = () => {
-    const theme = useTheme();
-    // const [open, setOpen] = React.useState(false);
-    const dispatch = useAppDispatch();
+    const { user, token } = useStateContext();
+
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
+
     const open = useAppSelector((state) => state.drawer.open);
     return (
         <Box sx={{ display: "flex" }}>

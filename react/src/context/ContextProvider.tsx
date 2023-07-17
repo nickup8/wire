@@ -1,18 +1,33 @@
-import { createContext, useState, useContext } from "react";
-
+import axios from "axios";
+import {
+    createContext,
+    useState,
+    useContext,
+    Dispatch,
+    SetStateAction,
+} from "react";
+interface User {
+    name: string;
+}
 interface IState {
-    user: null | string;
+    user: null | User;
     token: null | string;
-    setUser: () => void;
-    setToken: () => void;
+    setUser: Dispatch<SetStateAction<User>>;
+    setToken: (token: any) => void;
+    csrfToken: () => Promise<boolean>;
 }
 
-const StateContext = createContext({
+const defaultState = {
     user: null,
     token: null,
     setUser: () => {},
     setToken: () => {},
-});
+    csrfToken: () => {
+        return Promise.resolve(false);
+    },
+} as IState;
+
+const StateContext = createContext(defaultState);
 
 interface ContextProviderProps {
     children: React.ReactNode;
@@ -23,7 +38,7 @@ type Token = (token: string) => void;
 export const ContextProvider: React.FC<ContextProviderProps> = ({
     children,
 }) => {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState<User | null>(null);
     const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
 
     const setToken: Token = (token) => {
@@ -35,8 +50,15 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
         }
     };
 
+    const csrfToken = async () => {
+        await axios.get("http://wire/sanctum/csrf-cookie");
+        return true;
+    };
+
     return (
-        <StateContext.Provider value={{ user, token, setUser, setToken }}>
+        <StateContext.Provider
+            value={{ user, token, setUser, setToken, csrfToken }}
+        >
             {children}
         </StateContext.Provider>
     );
