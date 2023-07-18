@@ -18,15 +18,15 @@ class AuthController extends Controller
         $data = $request->validated();
         $user = User::create([
             'name' => $data['name'],
-            'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'rules_id' => $data['rules_id'],
         ]);
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // $token = $user->createToken('auth_token')->plainTextToken;
 
-        $cookie = cookie('token', $token, 60 * 24);
+        // $cookie = cookie('token', $token, 60 * 24);
         return response()->json([
             'user' => new UserResource($user),
-        ])->withCookie($cookie);
+        ]);
     }
 
     // login a user method
@@ -50,6 +50,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => new UserResource($user),
             'token' => $token,
+
         ])->withCookie($cookie);
     }
 

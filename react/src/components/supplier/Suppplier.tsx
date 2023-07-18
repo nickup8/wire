@@ -34,7 +34,7 @@ export const Suppplier: React.FC = () => {
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get("/V1/suppliers").then((data) => {
+        axiosClient.get("/v1/suppliers").then((data) => {
             setSuppliers(data.data.data);
             setLoading(false);
         });

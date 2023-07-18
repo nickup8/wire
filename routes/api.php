@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\V1\SupplierController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\RulesController;
+use App\Http\Controllers\Api\V1\UsersController;
 use App\Http\Resources\SupplierResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,14 +20,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
-
+Route::prefix('v1')->group(function () {
+    Route::apiResource('/rules', RulesController::class);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
         Route::apiResource('/suppliers', SupplierController::class);
+        Route::apiResource('/users', UsersController::class);
     });
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
-    Route::post('/register', [AuthController::class, 'register']);
 });

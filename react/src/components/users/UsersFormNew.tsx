@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Typography,
@@ -29,25 +29,56 @@ interface IUserForm {
     name: string;
     password: string;
     passwordConfirm: string;
-    role: string;
+    rule_id: number | string;
+}
+
+interface IRules {
+    id: number;
+    name: string;
+    value: string;
 }
 
 export const UsersFormNew = () => {
-    const form = useForm<IUserForm>();
-    const { register, formState, handleSubmit, getValues, control } = form;
-    const { isValid } = formState;
-
     const [sending, setSending] = useState(false);
     const [errors, setErrors] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const navigate = useNavigate();
+    const [rules, setRules] = useState<IRules[]>([]);
+    const [rule, setRule] = useState<string | null>(null);
+
+    useEffect(() => {
+        axiosClient.get("/v1/rules").then((response) => {
+            setRules(response.data);
+        });
+    }, []);
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setRule(event.target.value as string);
+    };
+
+    const form = useForm<IUserForm>({
+        defaultValues: {
+            name: "",
+            password: "",
+            passwordConfirm: "",
+            rule_id: "",
+        },
+    });
+    const { register, formState, handleSubmit, getValues, control } = form;
+    const { isValid } = formState;
 
     const onSubmit = () => {
         setSending(true);
+
         axiosClient
-            .post("/suppliers", {})
+            .post("/register", {
+                name: getValues("name"),
+                password: getValues("password"),
+                password_confirmation: getValues("passwordConfirm"),
+                rules_id: getValues("rule_id"),
+            })
             .then((response) => {
                 setSending(false);
                 setOpen(true);
@@ -140,7 +171,7 @@ export const UsersFormNew = () => {
                                         required: "Пароли не совпадают",
                                         min: 6,
                                     })}
-                                    id="password"
+                                    id="passwordConfirm"
                                     type={
                                         showPasswordConfirm
                                             ? "text"
@@ -149,7 +180,7 @@ export const UsersFormNew = () => {
                                     endAdornment={
                                         <InputAdornment position="end">
                                             <IconButton
-                                                aria-label="toggle password visibility"
+                                                aria-label="toggle passwordConfirm visibility"
                                                 onClick={
                                                     handleClickShowPasswordConfirm
                                                 }
@@ -172,27 +203,24 @@ export const UsersFormNew = () => {
                             <Controller
                                 render={({ field }) => (
                                     <FormControl fullWidth size="small">
-                                        <InputLabel id="role">Роль</InputLabel>
-                                        <Select
-                                            labelId="role"
-                                            label="Роль"
-                                            id="role"
-                                            {...field}
-                                            {...register("role", {
-                                                required:
-                                                    "Определите роль пользователя",
+                                        <InputLabel>Роль</InputLabel>
+                                        <Select {...field} label="Роль">
+                                            {rules.map((rule, index) => {
+                                                return (
+                                                    <MenuItem
+                                                        value={rule.id}
+                                                        key={`${index}_${rule.id}_${rule.name}`}
+                                                    >
+                                                        {rule.name}
+                                                    </MenuItem>
+                                                );
                                             })}
-                                        >
-                                            <MenuItem value={10}>1</MenuItem>
-                                            <MenuItem value={20}>2</MenuItem>
-                                            <MenuItem value={30}>3</MenuItem>
                                         </Select>
                                     </FormControl>
                                 )}
-                                name="role"
+                                name="rule_id"
                                 control={control}
                             />
-
                             {/* <FormControl fullWidth size="small">
                                 <InputLabel id="role">Роль</InputLabel>
                                 <Select
