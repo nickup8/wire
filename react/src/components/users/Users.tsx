@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Box,
     Paper,
@@ -15,8 +15,24 @@ import {
 import { Link } from "react-router-dom";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import axiosClient from "../../axiosClient";
+
+interface IUser {
+    id: number;
+    name: string;
+    rule: string;
+    created_at: number;
+}
 
 export const Users = () => {
+    const [users, setUser] = useState<IUser[]>([]);
+
+    useEffect(() => {
+        axiosClient.get("/v1/users").then((response) => {
+            setUser(response.data);
+        });
+    }, []);
+
     return (
         <Box>
             <Box
@@ -72,10 +88,30 @@ export const Users = () => {
                                         fontWeight: "bold",
                                     }}
                                 >
+                                    Дата создания
+                                </TableCell>
+                                <TableCell
+                                    sx={{
+                                        fontSize: "18px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
                                     Действия
                                 </TableCell>
                             </TableRow>
                         </TableHead>
+                        <TableBody>
+                            {users.map((user, index) => {
+                                return (
+                                    <TableRow key={`${index}_${user.name}`}>
+                                        <TableCell>{user.name}</TableCell>
+                                        <TableCell>{user.rule}</TableCell>
+                                        <TableCell>{user.created_at}</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
                     </Table>
                 </TableContainer>
             </Paper>

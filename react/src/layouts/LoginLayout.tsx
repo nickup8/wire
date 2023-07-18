@@ -39,6 +39,7 @@ export const LoginLayout = () => {
             .then(({ data }) => {
                 setToken(data.token);
                 setUser(data.user);
+                console.log(data.user);
             })
             .catch((error) => {
                 setSending(false);
