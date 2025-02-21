@@ -1,6 +1,14 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
+import Table from "@/Components/Table/Table";
+import TrbodyTable from "@/Components/Table/TbodyTable";
+import TbodyTable from "@/Components/Table/TbodyTable";
+import TdTable from "@/Components/Table/TdTable";
+import TheadTable from "@/Components/Table/TheadTable";
+import ThTable from "@/Components/Table/ThTable";
+import TrBodyTable from "@/Components/Table/TrBodyTable";
+import TrHeadTable from "@/Components/Table/TrHeadTable";
 import TextInput from "@/Components/TextInput";
 import LogisticLayout from "@/Layouts/LogisticLayout";
 import { PageProps } from "@/types";
@@ -59,7 +67,7 @@ function Zone({ zones }: ZoneProps) {
         formState: { errors },
     } = useForm<FormData>();
 
-    const { errors: serverError } = usePage<ZoneProps>().props;
+    const { errors: serverError } = usePage<PageProps>().props;
 
     useEffect(() => {
         if (serverError) {
@@ -76,7 +84,8 @@ function Zone({ zones }: ZoneProps) {
 
     const submit: SubmitHandler<FormData> = (data) => {
         setIsSending(true);
-        router.post("/zones", data, {
+        const transformName = { ...data, name: `Зона ${data.name}` };
+        router.post("/zones", transformName, {
             onSuccess: () => {
                 reset();
                 setIsSending(false);
@@ -94,11 +103,15 @@ function Zone({ zones }: ZoneProps) {
         <>
             <Head title="Зоны" />
             <h1 className="text-2xl font-bold">Зоны фидинга</h1>
-            <div className="flex space-x-4 mt-4">
+            <div className="flex space-x-6 mt-4">
                 <div>
                     <div className="p-6 bg-white rounded shadow-sm min-w-80">
                         <h2 className="text-lg font-medium ">Добавить зону</h2>
-                        <form className="mt-2" onSubmit={handleSubmit(submit)}>
+                        <form
+                            className="mt-2"
+                            noValidate
+                            onSubmit={handleSubmit(submit)}
+                        >
                             <InputLabel htmlFor="zone">Номер зоны</InputLabel>
                             <input
                                 id="zone"
@@ -127,33 +140,24 @@ function Zone({ zones }: ZoneProps) {
                 <div className="flex-1 p-6 bg-white rounded shadow-sm">
                     <h2 className="mb-2 text-lg font-medium">Список зон</h2>
                     {zones.data.length > 0 ? (
-                        <table className="w-full border-collapse border border-gray-400">
-                            <thead className="">
-                                <tr className="bg-gray-900 text-white">
-                                    <th className="py-2 border border-gray-400">
-                                        Наименование зоны
-                                    </th>
-                                    <th className="py-2 border border-gray-400">
-                                        Дата создания
-                                    </th>
-                                    <th className="py-2 border border-gray-400"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <Table className="w-full border-collapse border border-gray-400">
+                            <TheadTable>
+                                <TrHeadTable>
+                                    <ThTable>Наименование зоны</ThTable>
+                                    <ThTable>Дата создания</ThTable>
+                                    <ThTable></ThTable>
+                                </TrHeadTable>
+                            </TheadTable>
+                            <TbodyTable>
                                 {zones.data.map((zone) => (
-                                    <tr
-                                        className="even:bg-gray-100"
-                                        key={zone.id}
-                                    >
-                                        <td className="border border-gray-400 text-center">
-                                            {zone.name}
-                                        </td>
-                                        <td className="border border-gray-400 text-center">
+                                    <TrBodyTable key={zone.id.toString()}>
+                                        <TdTable>{zone.name}</TdTable>
+                                        <TdTable>
                                             {new Date(
                                                 zone.created_at
                                             ).toLocaleDateString()}
-                                        </td>
-                                        <td className="border border-gray-400 text-center">
+                                        </TdTable>
+                                        <TdTable>
                                             <button
                                                 className="p-2 hover:bg-gray-100 rounded-full transition duration-250 ease-in-out hover:cursor-pointer active:bg-gray-200 text-red-500"
                                                 onClick={() =>
@@ -162,11 +166,11 @@ function Zone({ zones }: ZoneProps) {
                                             >
                                                 <TrashIcon className="w-6 h-6" />
                                             </button>
-                                        </td>
-                                    </tr>
+                                        </TdTable>
+                                    </TrBodyTable>
                                 ))}
-                            </tbody>
-                        </table>
+                            </TbodyTable>
+                        </Table>
                     ) : (
                         <p>
                             Зоны еще не созданы. Создайте первую зону вашего

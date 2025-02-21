@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Zone;
 use Illuminate\Http\Request;
 
 class StorageController extends Controller
 {
     public function index()
     {
-        return inertia('Storage/StorageIndex');
+        $zones = Zone::all();
+        return inertia('Storage/StorageIndex', [
+            'zones' => $zones
+        ]);
     }
 }

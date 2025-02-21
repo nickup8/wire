@@ -21,7 +21,7 @@ class ZoneController extends Controller
         $data = $request->validated();
 
         Zone::create([
-            'name' => 'Зона ' . $data['name'],
+            'name' => $data['name'],
         ]);
 
         return redirect()->back();

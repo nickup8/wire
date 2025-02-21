@@ -22,7 +22,7 @@ class ZoneRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'integer', 'min:1', 'unique:zones,name'],
+            'name' => ['required', 'string', 'unique:zones,name'],
         ];
     }
 }
